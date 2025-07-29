@@ -4,3 +4,8 @@
 n + nn + nnn, где n не перемножаются, а конкатенируются
 
 */
+
+let n = 2;
+let result = +String(n) + +((String(n) + String(n))) + +(String(n) + String(n) + String(n));
+console.log(result) // 246
+
