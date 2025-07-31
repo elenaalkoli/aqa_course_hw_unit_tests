@@ -60,7 +60,7 @@ item_6 = 15;
 item_6_type = typeof(item_6);
 
 // 21. Вывести в консоль тип данных item_6 в виде ——  “item_6 == ”  item_6,  “item_6_type == ”  item_6_type ——  
-console.log(`item_6 == ${item_6}, item_6_type == ${item_6}`); 
+console.log(`item_6 == ${item_6}, item_6_type == ${typeof item_6}`); 
 
 // 22. Создать переменную item_7 и в ней преобразовать item_6 в String.
 let item_7 = String(item_6); 
@@ -72,4 +72,4 @@ let item_7_type;
 item_7_type = typeof(item_7);
 
 // 25. Вывести в консоль тип данных item_7 в виде ——  “item_7 == ”  item_7,  “item_7_type == ”  item_7_type ——  
-console.log(`item_7 == ${item_7}, item_7_type == ${item_7_type}`)
+console.log(`item_7 == ${item_7}, item_7_type == ${typeof item_7_type}`)
