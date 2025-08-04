@@ -5,7 +5,6 @@ n + nn + nnn, где n не перемножаются, а конкатенир�
 
 */
 
-let n = 2;
+const n = 2;
 const result = +String(n) + +(String(n) + n) + +(String(n) + n + n);
-console.log(result) // 246
-
+console.log(result); // 246
