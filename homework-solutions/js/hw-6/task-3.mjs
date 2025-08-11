@@ -9,11 +9,13 @@
 let unique = [];
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 4, 6, 8, 10, 1, 3, 5, 7, 9];
 
-for (const item of arr){
-  if (!unique.includes(item)) {
-    unique.push(item);
+for (let i = arr.length -1; i >= 0; i --) { //идем с конца по индексам 19
+  if (arr.indexOf(arr[i]) !== i) { // сравниваем индекс 1 появления в массиве слева-направо !== входящему индексу с конца
+    arr.splice(i, 1); 
   }
 }
+
+unique = arr;
 console.log(unique)
 
 //или
