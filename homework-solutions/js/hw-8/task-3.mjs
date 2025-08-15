@@ -6,8 +6,8 @@
   Пример: const arr = [5,2,7,3,8,1,6] //4
 */
 
-function findMissingNumber(numbers) {
-  // Ваш код
-}
 
+function findMissingNumber(numbers) { 
+}
+ 
 export { findMissingNumber };
