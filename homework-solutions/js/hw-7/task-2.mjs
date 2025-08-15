@@ -4,8 +4,17 @@
 */
 
 function isPalindrom(word) {
-  // Ваш код
+  if (typeof word !== 'string') {
+    return false;
+  }
+  if (word.length <= 1) { //если пустая или 1 символ в строке
+    return true;  
+  }
+  let wordToLowerCase = word.toLowerCase();
+  return wordToLowerCase === wordToLowerCase.split('').reverse().join('');
 }
+console.log(isPalindrom('MadAm')); //true
+
 
 /*
  2. findLongestWords()
@@ -15,7 +24,14 @@ function isPalindrom(word) {
 */
 
 function findLongestWords(sentence) {
-  // Ваш код
+  if (!sentence || typeof sentence !== 'string') {
+    return [];
+  }
+  const sentenceInArr = sentence.trim().split(/\s+/); 
+  // return console.log(sentenceInArr);
+  const maxLengthWord = Math.max(...sentenceInArr.map((el) => el.length)); // spread, тк. Math.max работает только с отд. арг., не c []
+  return sentenceInArr.filter((el) => el.length === maxLengthWord);
 }
 
+console.log(findLongestWords('I am qa     engineer engineer'))
 export { isPalindrom, findLongestWords };

@@ -9,7 +9,16 @@
 */
 
 function digitalRoot(number) {
-  // Ваш код
+ if (typeof number !== 'number') {
+    return console.log(`${number} is not a number`);
+  }
+  if (number < 10) {
+    return number;
+  };
+  const sum = number.toString().split('').reduce((res, el) => res + Number(el), 0);
+  return digitalRoot(sum);
 }
+
+console.log(digitalRoot(1199)); //2
 
 export { digitalRoot };
