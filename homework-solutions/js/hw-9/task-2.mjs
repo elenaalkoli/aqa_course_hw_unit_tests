@@ -8,29 +8,55 @@
  */
 
 const characters = [
-  { name: 'Barney', age: 35 },
+  { name: 'Barney', age: 40 },
   { name: 'Fred', age: 39 },
   { name: 'Jack', age: 49 },
 ];
 
 function addCharacter(character) {
-  // Ваш код
+  if(!(character && typeof character.name === 'string' && typeof character.age === 'number')){
+        throw new Error('Invalid character object');
+  }
+  characters.push(character)
 }
 
 function getCharacter(name) {
-  // Ваш код
+  return characters.find(object => object.name === name);
+
 }
+// console.log(getCharacter('Fred'));
 
 function getCharactersByAge(minAge) {
-  // Ваш код
+  if (isNaN(minAge) || typeof minAge !== 'number') {
+    throw new Error('Invalid type of minAge');
+  }
+  return characters.filter(object => object.age >= minAge);
 }
+// console.log(getCharactersByAge(5));
 
 function updateCharacter(name, newCharacter) {
-  // Ваш код
+  const foundedCharacter = characters.find(object => object.name === name); // найдет {}
+   if (!foundedCharacter) {
+    throw new Error('Character not found');
+  }
+  foundedCharacter.name = newCharacter.name; // или Object.assign(character, { name: newCharacter.name, age: newCharacter.age });
+  foundedCharacter.age = newCharacter.age;
+  return foundedCharacter;
 }
+console.log(updateCharacter("Fred", { name: 'Fred2', age: 41}));
 
 function removeCharacter(name) {
-  // Ваш код
+  if(!name || typeof name !== 'string') {
+    throw new Error('Invalid type of name');
+  }
+  const foundedIndex = characters.findIndex(object => object.name === name);
+  if (foundedIndex === -1) {
+    throw new Error('Character not found');
+  }
+  characters.splice(foundedIndex, 1);
+  return characters;
 }
+console.log(removeCharacter('Jack'))
 
 export { characters, addCharacter, updateCharacter, getCharacter, getCharactersByAge, removeCharacter };
+
