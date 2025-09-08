@@ -128,11 +128,11 @@ class Company {
     //добавлена проверка уникальности имя + фамилия
     addEmployee(employee){
       if (!(employee instanceof Employee)) {
-        throw new Error (`${employee} is not an instance of Employee`)
+        throw new Error (`${employee.getFullName()} is not an instance of Employee`)
       }
       const isFullNameUnique = this.#employees.some(emp => emp.getFullName() === employee.getFullName());//хотя бы 1
       if (isFullNameUnique) {
-        throw new Error (`${employee} already exist`)
+        throw new Error (`${employee.getFullName()} already exist`)
       } else {
         this.#employees.push(employee)
       }   
@@ -186,5 +186,19 @@ class Company {
 }
 };
 
+const dev1 = new Developer('Alex', 'Dev1', 2000, ['JS', 'TS']);
+const mng1 = new Manager('Michael', 'Mng1', 3000, 10);
+const des1 = new Designer('Olga', 'Des1', 5000, ['3d-modeling', 'Figma']);
+const des2 = new Designer('Olga', 'Des1', 6000, ['3d-modeling']);
+
+const comp1 = new Company("MyCompany", "123-456", "Some Address");
+
+comp1.addEmployee(dev1);
+comp1.addEmployee(mng1);
+comp1.addEmployee(des1);
+comp1.addEmployee(des2);
+
+const devs = console.log(comp1.getEmployeesByProfession('Developer'));
+const qas = console.log(comp1.getEmployeesByProfession('QA'));
 
 export { Employee, Company, Designer, Developer, Manager };
