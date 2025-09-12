@@ -8,13 +8,13 @@
 // Функция должна возвращать false, если хотя бы одно из условий не выполнено.
 
 function validatePassword(password: string): boolean {
-    if (!/[A-Z]/.test(password)) {
+    if (!/\p{Lu}/u.test(password)) {
         return false;
     }
-    if (!/[a-z]/.test(password)) {
+    if (!/\p{Ll}/u.test(password)) {
         return false;
     }
-    if (!/[0-9]/.test(password)) {
+    if (!/\p{Nd}/u.test(password)) {
         return false;
     }
     if (password.length < 8) {
@@ -29,3 +29,4 @@ function validatePassword(password: string): boolean {
 console.log(validatePassword("password"));
 console.log(validatePassword("pAssword1"));
 console.log(validatePassword("Pas1"));
+console.log(validatePassword("Pусский1"));
