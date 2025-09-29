@@ -123,37 +123,7 @@ const enterprises = [
 // Пример:
 // moveEmployees(2, 3)
 
-class EnterprisesManager { //каталог компании, методы работают с []предприятий
-    enterprises: Enterprise[] = [];
-    
-    //добавить новое предприятие 
-    public addEnterprise(newName: string):void {
-        if(!newName) return;
-        const newId = this.getNewId();
-        const newEnterprise = new Enterprise(newId, newName, []);
-        this.enterprises.push(newEnterprise);
-    };
 
-    private getNewId():number{
-        return this.enterprises.length ? Math.max(...this.enterprises.map(ent => ent.id)) + 1 : 1;
-    }
-
-    //удалить предприятие по id
-    public deleteEnterprise(id:number):void {
-        const index = this.foundEnterpriseIndexById(id);
-        if (index !== -1) {
-            this.enterprises.splice(index,1);
-        }
-    };
-
-    private foundEnterpriseIndexById (id:number): number {
-        return this.enterprises.findIndex(ent => ent.id === id); //если не найдет - вернет -1
-    }
-
-    getEnterpriseByDepartment(){};
-    getEnterpriseName(){};
-    printAll(){};
-};
 
 class Enterprise { //1 предприятие
     public id: number;
@@ -189,3 +159,51 @@ class Department { //1 отдел
     removeEmployees(){};
     editName(){};
 };
+
+class EnterprisesManager { //каталог компании, методы работают с []предприятий
+    enterprises: Enterprise[] = [];
+
+       constructor(newEnterprises: typeof enterprises = []) {
+        this.enterprises = newEnterprises.map(
+            ent => new Enterprise(ent.id, ent.name, ent.departments)
+        );
+    }
+    
+    //добавить новое предприятие 
+    public addEnterprise(newName: string):void {
+        if(!newName) return;
+        const newId = this.getNewId();
+        const newEnterprise = new Enterprise(newId, newName, []);
+        this.enterprises.push(newEnterprise);
+    };
+
+    private getNewId():number{
+        return this.enterprises.length ? Math.max(...this.enterprises.map(ent => ent.id)) + 1 : 1;
+    }
+
+    //удалить предприятие по id
+    public deleteEnterprise(id:number):void {
+        const index = this.foundEnterpriseIndexById(id);
+        if (index !== -1) {
+            this.enterprises.splice(index,1);
+        }
+    };
+
+    private foundEnterpriseIndexById (id:number): number {
+        return this.enterprises.findIndex(ent => ent.id === id); //если не найдет - вернет -1
+    };
+
+    public getEnterpriseName(idOrName: number | string): Enterprise | undefined {
+        return this.enterprises.find(ent => ent.departments.some(dep =>
+        (typeof idOrName === 'number' && dep.id === idOrName) || 
+        (typeof idOrName === 'string' && dep.name === idOrName)
+        ));
+    };
+
+    getEnterpriseByDepartment(){};
+    printAll(){};
+};
+const newEnt = new EnterprisesManager(enterprises);
+const foundedEnt = newEnt.getEnterpriseName(10);
+console.log(foundedEnt);
+
