@@ -18,13 +18,7 @@ interface IVehicle {
 //     - Абстрактный метод getDetails, который нужно реализовать в классах-наследниках.
 
 abstract class Vehicle implements IVehicle {
-    make: string;
-    model: string;
-
-    constructor (make: string, model: string) {
-        this.make = make;
-        this.model = model;
-    }
+    constructor (public make: string, public model: string) {}
 
     start():string {
         return `The vehicle ${this.make} ${this.model} is starting.`
@@ -37,11 +31,8 @@ abstract class Vehicle implements IVehicle {
 //     - Реализует метода getDetails, возвращающего строку: "{make} {model}, {year}".
 
 class Car extends Vehicle {
-    year:number;
-
-    constructor (make: string, model: string, year:number) {
+    constructor (make: string, model: string, public year:number) {
         super(make, model);
-        this.year = year;
     }
     getDetails():string {
         return `${this.make} ${this.model}, ${this.year}`
