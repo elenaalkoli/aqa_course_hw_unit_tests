@@ -136,12 +136,47 @@ class Enterprise { //1 предприятие
         this.departments = departments.map(
             dep => new Department(dep.id, dep.name, dep.employees_count)
         );//новый [] с объектами из класса Department
+    };
+      
+      //добавить отдел
+    public addDepartment(departmentName: string ): void {
+      const newDepId = this.getNewDepertmentId();
+      this.departments.push(new Department(newDepId, departmentName, 0))
+    };
+
+     private getNewDepertmentId():number {
+      return this.departments.length ? Math.max(...this.departments.map(ent => ent.id)) + 1 : 1;
+    };
+    
+    editEnterpriseName(newName: string): void {
+      this.name = newName;
+    };
+    
+    deleteDepartment(departmentId: number): void {
+      const foundedDepartmentIndex = this.getDepartmentIndexById(departmentId);
+        if(foundedDepartmentIndex === -1) return
+        if(this.departments[foundedDepartmentIndex].employees_count === 0) {
+          this.departments.splice(foundedDepartmentIndex, 1);
+        }
+        else return;
+      };
+
+    private getDepartmentIndexById(departmentId: number): number {
+      return this.departments.findIndex(dep => dep.id === departmentId);
     }
 
-    editEnterpriseName(){};
-    addDepartment(){};
-    deleteDepartment(){};
-    moveEmployees(){};
+    public moveEmployees(fromId: number, toId: number): void {
+      const fromDep = this.getDepartmentById(fromId);
+      const toDep = this.getDepartmentById(toId);
+      if (!fromDep || !toDep) return;
+      toDep.addEmployeesCount(fromDep.employees_count);
+      fromDep.removeEmployeesCount(fromDep.employees_count);
+    };
+
+    private getDepartmentById(departmentId: number): Department | undefined {
+      return this.departments.find(dep => dep.id === departmentId);
+    }
+
 };
 
 class Department { //1 отдел
@@ -155,9 +190,21 @@ class Department { //1 отдел
         this.employees_count = employees_count;
     }
 
-    addEmployees(){};
-    removeEmployees(){};
-    editName(){};
+    addEmployeesCount(count: number): void {
+      if (count > 0) {
+      this.employees_count += count;
+      }
+    };
+  
+    removeEmployeesCount(count: number): void {
+      if (count > 0) {
+        this.employees_count -= count;
+      }
+    };
+
+    editName(newName: string): void {
+      this.name = newName;
+    };
 };
 
 class EnterprisesManager { //каталог компании, методы работают с []предприятий
@@ -168,16 +215,16 @@ class EnterprisesManager { //каталог компании, методы ра�
             ent => new Enterprise(ent.id, ent.name, ent.departments)
         );
     }
-    
+
     //добавить новое предприятие 
     public addEnterprise(newName: string):void {
         if(!newName) return;
-        const newId = this.getNewId();
+        const newId = this.getNewEnterpriseId();
         const newEnterprise = new Enterprise(newId, newName, []);
         this.enterprises.push(newEnterprise);
     };
 
-    private getNewId():number{
+    private getNewEnterpriseId():number{
         return this.enterprises.length ? Math.max(...this.enterprises.map(ent => ent.id)) + 1 : 1;
     }
 
@@ -190,20 +237,48 @@ class EnterprisesManager { //каталог компании, методы ра�
     };
 
     private foundEnterpriseIndexById (id:number): number {
-        return this.enterprises.findIndex(ent => ent.id === id); //если не найдет - вернет -1
+        return this.enterprises.findIndex(ent => ent.id === id); //если не найдет вернет -1
     };
 
-    public getEnterpriseName(idOrName: number | string): Enterprise | undefined {
+    //получить предприятие по id или имени
+    public getEnterpriseByIdOrName(idOrName: number | string): Enterprise | undefined {
         return this.enterprises.find(ent => ent.departments.some(dep =>
         (typeof idOrName === 'number' && dep.id === idOrName) || 
         (typeof idOrName === 'string' && dep.name === idOrName)
         ));
     };
 
-    getEnterpriseByDepartment(){};
-    printAll(){};
+    //печать инфо
+    public printAll(): void {
+        this.enterprises.forEach(ent => {
+            const totalEmployees = this.getTotalEmployees(ent);
+            console.log(`${ent.name} (${totalEmployees ? totalEmployees + ' сотрудников' : 'нет сотрудников'})`);
+            ent.departments.forEach(dep => 
+                console.log(`- ${dep.name} (${dep.employees_count ? dep.employees_count + ' сотрудников' : 'нет сотрудников'})`))
+        });
+    };
+
+    //кол-во сотрудников для 1 предприятия
+    private getTotalEmployees (ent : Enterprise) : number {
+        return ent.departments.reduce((accum, dep) => dep.employees_count + accum, 0)
+    }; 
+
+    // добавлять отдел в предприятие по id
+    public addDepartmentById(enterpriseId: number, DepartmentName: string): void {
+        const foundedEnterprise = this.foundEnterpriseById(enterpriseId);
+        if(foundedEnterprise) {
+          foundedEnterprise.addDepartment(DepartmentName);
+        }
+        else return;
+    };
+
+    private foundEnterpriseById (enterpriseId: number): Enterprise | undefined {
+      return this.enterprises.find(ent => ent.id === enterpriseId);
+    }
+  
 };
-const newEnt = new EnterprisesManager(enterprises);
-const foundedEnt = newEnt.getEnterpriseName(10);
-console.log(foundedEnt);
+// const newEnt = new EnterprisesManager(enterprises);
+// const foundedEnt = newEnt.getEnterpriseByIdOrName('Отдел маркетинга');
+// console.log(foundedEnt);
+// newEnt.printAll();
 
